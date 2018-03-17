@@ -555,9 +555,19 @@ function GetXDInstalledRole {
     )
     process {
 
+        $installedProducts = Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*' -ErrorAction SilentlyContinue |
+        Where-Object { $_.DisplayName -like '*Citrix*' -and $_.ProductName -notlike '*snap-in' } |
+            Select-Object -ExpandProperty DisplayName;
+
+        $installedProducts += Get-ItemProperty 'HKLM:\SOFTWARE\WOW6432\Microsoft\Windows\CurrentVersion\Uninstall\*' -ErrorAction SilentlyContinue |
+        Where-Object { $_.DisplayName -like '*Citrix*' -and $_.ProductName -notlike '*snap-in' } |
+            Select-Object -ExpandProperty DisplayName;
+
+
         $installedProducts = Get-ItemProperty 'HKLM:\SOFTWARE\Classes\Installer\Products\*' -ErrorAction SilentlyContinue |
             Where-Object { $_.ProductName -like '*Citrix*' -and $_.ProductName -notlike '*snap-in' } |
                 Select-Object -ExpandProperty ProductName;
+
 
         $installedRoles = @();
         foreach ($r in $Role) {
@@ -571,13 +581,13 @@ function GetXDInstalledRole {
                     $filter = 'Citrix Studio';
                 }
                 'Storefront' {
-                    $filter = 'Citrix Storefront$';
+                    $filter = 'Citrix Storefront';
                 }
                 'Licensing' {
-                    $filter = 'Citrix Licensing';
+                    $filter = "Citrix Licensing,Citrix Lizenzierung";
                 }
                 'Director' {
-                    $filter = 'Citrix Director(?!.VDA Plugin)';
+                    $filter = 'Citrix Director';
                 }
                 'DesktopVDA' {
                     $filter = 'Citrix Virtual Desktop Agent';
@@ -587,14 +597,25 @@ function GetXDInstalledRole {
                 }
             }
 
-            $result = $installedProducts -match $filter;
-            if ([System.String]::IsNullOrEmpty($result)) {
+            $role_locales = $filter.Split(",")
 
-            }
-            elseif ($result) {
-                $installedRoles += $r;
-            }
+            Write-Verbose "alllocales $role_locales"
 
+            foreach ($locale in $role_locales) {
+                
+                Write-Verbose "Locale: $locale"
+                $result = $installedProducts -eq $locale;
+        
+                if ([System.String]::IsNullOrEmpty($result)) {
+
+                }
+                elseif ($result) {
+                    $installedRoles += $r;
+                    Write-Verbose "Role found: $installedRoles"
+                    break;
+                }
+                
+            }
         }
 
         return $installedRoles;
