@@ -210,6 +210,7 @@ function Set-TargetResource {
 
         $scriptBlockParams = @($SiteName, $DatabaseServer, $SiteDatabaseName, $LoggingDatabaseName, $MonitorDatabaseName);
         Write-Verbose ($localizedData.InvokingScriptBlockWithParams -f [System.String]::Join("','", $scriptBlockParams)); 
+        
         [ref] $null = Invoke-Command  @invokeCommandParams;
 
     } #end process
