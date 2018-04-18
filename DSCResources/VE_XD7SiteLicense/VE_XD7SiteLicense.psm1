@@ -23,7 +23,7 @@ function Get-TargetResource {
         [System.String] $LicenseProduct = 'XDT',
 
         [Parameter()]
-        [ValidateSet('PLT','ENT','ADV')]
+        [ValidateSet('PLT','ENT','ADV','STD')]
         [System.String] $LicenseEdition = 'PLT',
 
         [Parameter()]
@@ -110,7 +110,7 @@ function Test-TargetResource {
         [System.String] $LicenseProduct = 'XDT',
 
         [Parameter()]
-        [ValidateSet('PLT','ENT','ADV')]
+        [ValidateSet('PLT','ENT','ADV','STD')]
         [System.String] $LicenseEdition = 'PLT',
 
         [Parameter()]
@@ -193,7 +193,7 @@ function Set-TargetResource {
         [System.String] $LicenseProduct = 'XDT',
 
         [Parameter()]
-        [ValidateSet('PLT','ENT','ADV')]
+        [ValidateSet('PLT','ENT','ADV','STD')]
         [System.String] $LicenseEdition = 'PLT',
 
         [Parameter()]
