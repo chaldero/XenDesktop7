@@ -687,8 +687,8 @@ function ResolveXDServerSetupArguments {
     process {
 
         $arguments = New-Object -TypeName System.Collections.ArrayList -ArgumentList @();
-        $arguments.AddRange(@('/QUIET', '/LOGPATH', "`"$LogPath`"", '/NOREBOOT', '/COMPONENTS'));
-
+        #$arguments.AddRange(@('/QUIET', '/LOGPATH', "`"$LogPath`"", '/NOREBOOT', '/COMPONENTS')); # Server 2016
+        $arguments.AddRange(@('/QUIET', '/IGNORE_HW_CHECK_FAILURE' , '/LOGPATH', "`"$LogPath`"", '/NOREBOOT', '/COMPONENTS'));
         $components = @();
         foreach ($r in $Role) {
 
